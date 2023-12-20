@@ -34,40 +34,40 @@ public class Game
      */
     private void createRooms()
     {
-        Room auditoriumLobby, centerWestHallway, centerEastHallway, fortGreenePlace,
-             toNorthWestEntrance, toSouthWestEntrance, auditorium, toNorthEastEntrance,
-             toSouthEastEntrance, southEliot, murral;
+        Room startingRoom, itemRoom1, itemRoom2, monsterRoom1, monsterRoom2, monsterRoom3,
+             monsterRoom4, monsterRoom5, fountain, trapRoom1, trapRoom2, bossRoom;
       
         // create the rooms
-        auditoriumLobby = new Room("in lobby outside the auditorium");
-        centerWestHallway = new Room("in the center west hallway");
-        centerEastHallway = new Room("in the center east hallway");
-        fortGreenePlace = new Room("outside center west on Fort Greene Place");
-        toNorthWestEntrance = new Room("looking toward the north west entrance");
-        toSouthWestEntrance = new Room("looking toard the south west entrance");
-        auditorium = new Room("Auditorium");
-        toNorthEastEntrance = new Room("looking toward the north east entrance");
-        toSouthEastEntrance = new Room("looking toward the south east entrance");
-        southEliot = new Room("outside center east on South Elliot"); 
-        murral = new Room("at the murral in the lobby");
-        auditorium = new Room("in the auditorium");
+        startingRoom = new Room("in the starting room");
+        itemRoom1 = new Room("in an item room");
+        monsterRoom1 = new Room("in a monster room");
+        monsterRoom2 = new Room("in a monster room");
+        trapRoom1 = new Room("in a trap!");
+        fountain = new Room("in the fountain room\nYour health has been restored");
+        monsterRoom3 = new Room("in a monster room");
+        itemRoom2 = new Room("in an item room");
+        monsterRoom4 = new Room("in a monster room");
+        monsterRoom5 = new Room("in a monster room"); 
+        trapRoom2 = new Room("in a trap!");
+        bossRoom = new Room("in the boss room");
         
         // initialise room exits (north, east, south, west)
-        auditoriumLobby.setExits(murral, centerEastHallway, auditorium, centerWestHallway);
-        centerWestHallway.setExits(toNorthWestEntrance, auditoriumLobby, toSouthWestEntrance, fortGreenePlace);
-        centerEastHallway.setExits(toNorthEastEntrance, southEliot, toSouthEastEntrance, auditoriumLobby);
+        startingRoom.setExits(null, monsterRoom2, monsterRoom1, null);
+        monsterRoom1.setExits(startingRoom, null, trapRoom1, null);
+        trapRoom1.setExits(monsterRoom1, null, monsterRoom3, null);
 
-        fortGreenePlace.setExits(null, centerWestHallway, null, null);
-        toNorthWestEntrance.setExits(null, null, centerWestHallway, null);
-        toSouthWestEntrance.setExits(centerWestHallway, null, null, null);
-        auditorium.setExits(auditoriumLobby, null, null, null);
-        murral.setExits(null, null, auditoriumLobby, null);
-        southEliot.setExits(null, centerEastHallway, null, null);
-        toNorthEastEntrance.setExits(null, null, centerEastHallway, null);
-        toSouthEastEntrance.setExits(centerEastHallway, null, null, null);
+        monsterRoom3.setExits(trapRoom1, itemRoom1, null, null);
+        itemRoom1.setExits(null, monsterRoom3, null, trapRoom2);
+        monsterRoom2.setExits(null, itemRoom2, null, startingRoom);
+        itemRoom2.setExits(null, null, fountain, monsterRoom2);
+        fountain.setExits(itemRoom2, null, monsterRoom4, null);
+        monsterRoom4.setExits(fountain, null, trapRoom2, null);
+        trapRoom2.setExits(monsterRoom4, monsterRoom5, null, itemRoom1);
+        monsterRoom5.setExits(null, bossRoom, null, trapRoom2);
+        bossRoom.setExits(null, null, null, monsterRoom5);
         
 
-        currentRoom = auditoriumLobby;  // start game outside
+        currentRoom = startingRoom;  // start game outside
     }
 
     /**
