@@ -35,7 +35,8 @@ public class Game
     private void createRooms()
     {
         Room startingRoom, itemRoom1, itemRoom2, monsterRoom1, monsterRoom2, monsterRoom3,
-             monsterRoom4, monsterRoom5, fountain, trapRoom1, trapRoom2, bossRoom;
+             monsterRoom4, monsterRoom5, fountain, trapRoom1, trapRoom2, bossRoom1,
+             floor2;
       
         // create the rooms
         startingRoom = new Room("in the starting room");
@@ -49,7 +50,8 @@ public class Game
         monsterRoom4 = new Room("in a monster room");
         monsterRoom5 = new Room("in a monster room"); 
         trapRoom2 = new Room("in a trap!");
-        bossRoom = new Room("in the boss room");
+        bossRoom1 = new Room("in the boss room");
+        floor2 = new Room("on the second floor of the dungeon");
         
         // initialise room exits (north, east, south, west)
         startingRoom.setExits(null, monsterRoom2, monsterRoom1, null);
@@ -63,10 +65,12 @@ public class Game
         fountain.setExits(itemRoom2, null, monsterRoom4, null);
         monsterRoom4.setExits(fountain, null, trapRoom2, null);
         trapRoom2.setExits(monsterRoom4, monsterRoom5, null, itemRoom1);
-        monsterRoom5.setExits(null, bossRoom, null, trapRoom2);
-        bossRoom.setExits(null, null, null, monsterRoom5);
-        
+        monsterRoom5.setExits(null, bossRoom1, null, trapRoom2);
+        bossRoom1.setExits(null, null, null, monsterRoom5);
+        bossRoom1.setExit("upstairs", floor2);
 
+        floor2.setExit("downstairs", bossRoom1);
+        
         currentRoom = startingRoom;  // start game outside
     }
 
@@ -88,6 +92,12 @@ public class Game
         System.out.println("Thank you for playing.  Good bye.");
     }
 
+    private void printLocationInfo() {
+        System.out.println("You are " + currentRoom.getDescription());
+        System.out.print("You can go: ");
+        System.out.println(currentRoom.getExitString());
+    }
+
     /**
      * Print out the opening message for the player.
      */
@@ -98,21 +108,7 @@ public class Game
         System.out.println("World of Zuul is a new, incredibly boring adventure game.");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
-        System.out.println("You are " + currentRoom.getDescription());
-        System.out.print("You can go: ");
-        if(currentRoom.northExit != null) {
-            System.out.print("north ");
-        }
-        if(currentRoom.eastExit != null) {
-            System.out.print("east ");
-        }
-        if(currentRoom.southExit != null) {
-            System.out.print("south ");
-        }
-        if(currentRoom.westExit != null) {
-            System.out.print("west ");
-        }
-        System.out.println();
+        printLocationInfo();
     }
 
     /**
@@ -175,39 +171,14 @@ public class Game
 
         // Try to leave current room.
         Room nextRoom = null;
-        if(direction.equals("north")) {
-            nextRoom = currentRoom.northExit;
-        }
-        if(direction.equals("east")) {
-            nextRoom = currentRoom.eastExit;
-        }
-        if(direction.equals("south")) {
-            nextRoom = currentRoom.southExit;
-        }
-        if(direction.equals("west")) {
-            nextRoom = currentRoom.westExit;
-        }
+        nextRoom = currentRoom.getExit(direction);
 
         if (nextRoom == null) {
             System.out.println("There is no door!");
         }
         else {
             currentRoom = nextRoom;
-            System.out.println("You are " + currentRoom.getDescription());
-            System.out.print("Exits: ");
-            if(currentRoom.northExit != null) {
-                System.out.print("north ");
-            }
-            if(currentRoom.eastExit != null) {
-                System.out.print("east ");
-            }
-            if(currentRoom.southExit != null) {
-                System.out.print("south ");
-            }
-            if(currentRoom.westExit != null) {
-                System.out.print("west ");
-            }
-            System.out.println();
+            printLocationInfo();
         }
     }
 
