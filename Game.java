@@ -51,7 +51,7 @@ public class Game
         monsterRoom5 = new Room("in a monster room"); 
         trapRoom2 = new Room("in a trap!");
         bossRoom1 = new Room("in the boss room");
-        floor2 = new Room("on the second floor of the dungeon");
+        floor2 = new Room("out of the dungeon! Congratulations!");
         
         // initialise room exits (north, east, south, west)
         startingRoom.setExits(null, monsterRoom2, monsterRoom1, null);
@@ -74,6 +74,8 @@ public class Game
         currentRoom = startingRoom;  // start game outside
     }
 
+    public Player p1 = new Player();
+
     /**
      *  Main play routine.  Loops until end of play.
      */
@@ -83,7 +85,7 @@ public class Game
 
         // Enter the main command loop.  Here we repeatedly read commands and
         // execute them until the game is over.
-                
+        
         boolean finished = false;
         while (! finished) {
             Command command = parser.getCommand();
@@ -92,10 +94,17 @@ public class Game
         System.out.println("Thank you for playing.  Good bye.");
     }
 
-    private void printLocationInfo() {
+    private void printLocationInfo(Player player) {
         System.out.println("You are " + currentRoom.getDescription());
-        System.out.print("You can go: ");
-        System.out.println(currentRoom.getExitString());
+        if (currentRoom.getDescription().equals("in an item room")) {
+            p1.newWeapon();
+        }
+        if (currentRoom.getDescription().equals("out of the dungeon! Congratulations!")) {
+            System.out.println("Thank you for playing.  Good bye.");
+        } else {
+            System.out.print("You can go: ");
+            System.out.println(currentRoom.getExitString());
+        }
     }
 
     /**
@@ -108,7 +117,7 @@ public class Game
         System.out.println("World of Zuul is a new, incredibly boring adventure game.");
         System.out.println("Type 'help' if you need help.");
         System.out.println();
-        printLocationInfo();
+        printLocationInfo(p1);
     }
 
     /**
@@ -178,7 +187,7 @@ public class Game
         }
         else {
             currentRoom = nextRoom;
-            printLocationInfo();
+            printLocationInfo(p1);
         }
     }
 
